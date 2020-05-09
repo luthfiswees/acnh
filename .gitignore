@@ -1,1 +1,6 @@
 .env
+
+# Ignore build files
+bot/build/
+scheduler/build/
+scrapper/build/

@@ -4,3 +4,8 @@
 bot/build/
 scheduler/build/
 scrapper/build/
+
+# Ignore .gradle files
+bot/.gradle/
+scheduler/.gradle/
+scrapper/.gradle/

@@ -10,7 +10,7 @@ This repository contains 3 separate projects. All built using Java with Gradle s
 
 ## Architecture Diagram
 
-![architecture diagram](/home/luthfiswees/Documents/acnh/acnh-diagram.png)
+![architecture diagram](acnh-diagram.png)
 
 
 

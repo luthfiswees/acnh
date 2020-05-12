@@ -75,9 +75,9 @@ public class Aggregator {
         String name = villager.name;
         String link = villager.link;
 
-        String browserPath = this.env.get("CHROMEDRIVER_PATH");
-         
-        Scrapper scrpr = new Scrapper(browserPath);
+        String hubUrl = this.env.get("HUB_URL");
+
+        Scrapper scrpr = new Scrapper(hubUrl);
         VillagerDetail villagerDetail = scrpr.scrapVillagerDetails(name, link);
 
         insertVillagerData(villagerDetail);

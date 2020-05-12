@@ -1,0 +1,70 @@
+version: '3'
+services:
+  scrapper:
+    build: ./scrapper
+    environment:
+      - DB_NAME=acnh
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - CRON_STRING=25 16 * * *
+      - HUB_URL=http://selenium-hub:4444/wd/hub
+    depends_on:
+      - chrome
+      - mysql
+  bot:
+    build: ./bot
+    environment:
+      - DB_NAME=acnh
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - TELEGRAM_TOKEN=${ACNH_TELEGRAM_TOKEN}
+    depends_on:
+      - mysql
+      - redis
+  scheduler:
+    build: ./scheduler
+    environment:
+      - DB_NAME=acnh
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - CRONTAB=35 17 * * *
+      - TELEGRAM_TOKEN=${ACNH_TELEGRAM_TOKEN}
+  mysql:
+    image: "mysql:5.7"
+    ports:
+      - "3309:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+  redis:
+    image: "redis:4.0.5-alpine"
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+  selenium-hub:
+    image: selenium/hub:3.141.59-20200409
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+  chrome:
+    image: selenium/node-chrome:3.141.59-20200409
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+
+volumes:
+  redis-data:
+  

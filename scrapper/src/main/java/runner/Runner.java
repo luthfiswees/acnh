@@ -30,7 +30,7 @@ public class Runner {
     }
 
     public void exec() {
-        Scrapper scrapper = new Scrapper(this.env.get("CHROMEDRIVER_PATH"));
+        Scrapper scrapper = new Scrapper(this.env.get("HUB_URL"));
         List<Villager> villagers = scrapper.scrapVillagerNames();
         
         try {

@@ -194,6 +194,8 @@ public class Database {
             e.printStackTrace();
         }
 
+        if (villagers == null) villagers = "";
+
         return villagers;
     }
 }

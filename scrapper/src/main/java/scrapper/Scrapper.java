@@ -2,12 +2,14 @@ package scrapper;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.net.URL;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
@@ -17,15 +19,14 @@ import villager.VillagerDetail;
 
 public class Scrapper {
 
-    static final String CHROMEDRIVER_PROPERTY = "webdriver.chrome.driver";
+    static final String DEFAULT_URL = "http://127.0.0.1:4444/wd/hub/";
     static final String BASE_URL = "https://animalcrossing.fandom.com/wiki/Villager_list_(New_Horizons)";
     static final int WAIT_VALUE = 10000;
 
     WebDriver driver;
     WebDriverWait wait;
 
-    public Scrapper(String browserPath) {
-        System.setProperty(CHROMEDRIVER_PROPERTY, browserPath);
+    public Scrapper(String hubUrl) {
         ChromeOptions options = new ChromeOptions();
 
         // make sure it doesn't load images. It slows the process
@@ -34,8 +35,13 @@ public class Scrapper {
         // make sure it's headless
         options.addArguments("--headless");
 
-        this.driver = new ChromeDriver(options);
-        this.wait = new WebDriverWait(driver, WAIT_VALUE);
+        try {
+            this.driver = new RemoteWebDriver(new URL(hubUrl), options);
+            this.wait = new WebDriverWait(driver, WAIT_VALUE);
+        } catch (Exception e) {
+            System.out.println("HUB_URL is invalid");
+            e.printStackTrace();
+        }
     }
 
     public List<Villager> scrapVillagerNames() {

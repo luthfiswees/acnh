@@ -12,18 +12,19 @@ import model.MessageDetail;
 public class NotificationTask implements Runnable {
 
     TelegramBot bot;
-    Database db;
+    Env env;
 
     public NotificationTask(Env env){
         String token = env.get("TELEGRAM_TOKEN");
 
         this.bot  = new TelegramBot.Builder(token).debug().build();
-        this.db   = new Database(env);
+        this.env  = env;
     }
 
     public void run() {
-        List<String> villagersName = this.db.getVillagersName(getDateString());
-        List<MessageDetail> messageDetails = this.db.getMessageDetail(villagersName);
+        Database db = new Database(this.env);
+        List<String> villagersName = db.getVillagersName(getDateString());
+        List<MessageDetail> messageDetails = db.getMessageDetail(villagersName);
         
         Notifier notifier = new Notifier(this.bot);
         notifier.notify(messageDetails);
